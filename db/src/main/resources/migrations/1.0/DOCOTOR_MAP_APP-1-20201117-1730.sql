@@ -19,7 +19,4 @@ create table users
 
 insert into user_role
 values (1, 'ADMIN'),
-       (2, 'USER');
-
-insert into users (email, password, fio, role_id)
-values ('admin@mail.ru', 'admin', 'Иванов Иван Иванович', 1);
+       (2, 'DOCTOR');
