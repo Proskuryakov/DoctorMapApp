@@ -1,0 +1,18 @@
+server:
+  servlet:
+    context-path: /api
+spring:
+  liquibase:
+    change-log: classpath*:migrations/master-changelog.yml
+    user: doctor
+    url: jdbc:postgresql://localhost:5432/doctor_map_app
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/doctor_map_app
+    username: doctor
+    password: doctor
+  jpa:
+    show-sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    hibernate.ddl-auto: none
