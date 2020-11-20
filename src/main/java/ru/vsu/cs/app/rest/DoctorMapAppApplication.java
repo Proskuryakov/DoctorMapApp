@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Import;
 import ru.vsu.cs.app.services.ServiceConfig;
 
 @SpringBootApplication
-@Import(ServiceConfig.class)
+@Import({ServiceConfig.class, ServiceConfig.class})
 public class DoctorMapAppApplication {
 
     public static void main(String[] args) {

@@ -2,4 +2,5 @@ rootProject.name = 'app'
 
 include 'db'
 include 'services'
+include 'security'
 

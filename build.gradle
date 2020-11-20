@@ -41,21 +41,14 @@ allprojects {
 
     }
 
-//
-//    configurations {
-//        compileOnly {
-//            extendsFrom annotationProcessor
-//        }
-//    }
 }
 
 dependencies {
 
-//    implementation(project(':db'))
     implementation(project(':services'))
+    implementation(project(':security'))
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
-
 }
 
 
