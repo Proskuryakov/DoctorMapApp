@@ -3,10 +3,18 @@ databaseChangeLog:
       - dbms:
           type: postgresql
   - changeSet:
-      id: DOCOTOR_MAP_APP-1-20201117-1730
+      id: DOCTOR_MAP_APP-1-20201117-1730
       author: egor_proskuryakov
       comment: Create user table
       changes:
         - sqlFile:
-            path: DOCOTOR_MAP_APP-1-20201117-1730.sql
+            path: DOCTOR_MAP_APP-1-20201117-1730.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: DOCTOR-MAP-APP-1-20201121-2015
+      author: egor_proskuryakov
+      comment: Add admin
+      changes:
+        - sqlFile:
+            path: DOCTOR-MAP-APP-1-20201121-2015.sql
             relativeToChangelogFile: true

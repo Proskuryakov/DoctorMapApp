@@ -8,7 +8,7 @@ create table users
 (
     id       SERIAL primary key,
     email    varchar(100) not null unique,
-    password char(512)    not null,
+    password char(144)    not null,
     fio      varchar(250) not null,
     role_id  integer      not null,
 
