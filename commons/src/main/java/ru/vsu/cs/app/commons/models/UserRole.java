@@ -1,9 +1,9 @@
-package ru.vsu.cs.app.db.models;
+package ru.vsu.cs.app.commons.models;
 
 public enum UserRole {
 
     ADMIN(1),
-    USER(2);
+    DOCTOR(2);
 
     private final int id;
 

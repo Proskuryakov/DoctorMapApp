@@ -41,6 +41,12 @@ allprojects {
 
     }
 
+    if (name != 'commons') {
+        dependencies {
+            implementation(project(":commons"))
+        }
+    }
+
 }
 
 dependencies {
