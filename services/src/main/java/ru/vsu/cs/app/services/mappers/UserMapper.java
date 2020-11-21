@@ -14,8 +14,6 @@ public interface UserMapper {
     @Mapping(target = "email", source = "user.email")
     @Mapping(target = "password", source = "encodePassword")
     @Mapping(target = "fio", source = "user.fio")
-//    @Mapping(target = "userRole.name", source = "user.role")
-//    @Mapping(target = "userRole.id", source = "user.role.id")
     UserModel toModel(User user, String encodePassword);
 
     @Mapping(target = "id", source = "userModel.id")

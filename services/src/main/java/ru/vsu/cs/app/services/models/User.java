@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.vsu.cs.app.db.models.UserRole;
+import ru.vsu.cs.app.commons.models.UserRole;
 
 @NoArgsConstructor
 @Getter

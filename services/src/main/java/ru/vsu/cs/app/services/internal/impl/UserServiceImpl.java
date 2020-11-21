@@ -1,6 +1,7 @@
 package ru.vsu.cs.app.services.internal.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.vsu.cs.app.db.models.UserModel;
 import ru.vsu.cs.app.db.repositories.UserRepository;
@@ -15,21 +16,23 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserRoleRepository userRoleRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public User createUser(User user) {
-        //todo вызывать шифрацию пароля
-
         var userRole = userRoleRepository.findByName(user.getRole().name());
 
-        var userModel = userMapper.toModel(user, user.getPassword());
+        var encodePassword = passwordEncoder.encode(user.getPassword());
+
+        var userModel = userMapper.toModel(user, encodePassword);
         userModel.setUserRole(userRole);
 
         final var resUser = userRepository.save(userModel);
@@ -39,7 +42,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getById(Long id) {
-//        UserModel userModel = userRepository.findByIdJoinRole(id);
         UserModel userModel = userRepository.findById(id).orElse(null);
 
         if (userModel == null)
@@ -57,4 +59,5 @@ public class UserServiceImpl implements UserService {
     public boolean deleteById(Long id) {
         return false;
     }
+
 }

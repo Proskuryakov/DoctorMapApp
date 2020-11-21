@@ -15,9 +15,6 @@ public class UserModel {
     String email;
     String password;
     String fio;
-//
-//    @Enumerated(EnumType.STRING)
-//    UserRole userRole;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
