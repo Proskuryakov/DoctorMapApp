@@ -82,18 +82,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                     HttpServletResponse response,
                     AuthenticationException exception
             ) {
-                logger.error("Error", exception);
+                logger.error("Authentication error", exception);
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
         });
 
 
         http
-                .csrf().csrfTokenRepository(csrfTokenRepository()).and()
+                .csrf()/*.csrfTokenRepository(csrfTokenRepository()).and()*/.disable()
                 .authorizeRequests()
                 .antMatchers("/auth/**").not().authenticated()
                 .antMatchers("/admin/**").hasAuthority("ROLE_" + UserRole.ADMIN.name())
-                .antMatchers("/**").authenticated()
+                .anyRequest().authenticated()
                 .and()
                 .logout()
                 .logoutUrl("/logout")

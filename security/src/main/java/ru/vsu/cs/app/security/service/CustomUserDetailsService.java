@@ -21,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        var userModel = userRepository.findByEmail(username);
+        var userModel = userRepository.getUserModel(username);
 
         if (userModel == null) {
             throw new UsernameNotFoundException("Unknown user: " + username);
@@ -30,7 +30,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(userModel.getEmail())
                 .password(userModel.getPassword())
-                .roles(userModel.getUserRole().getName())
+//                .roles(userModel.getUserRole().getName())
+                .roles(userModel.getRole().name())
                 .build();
     }
 

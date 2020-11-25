@@ -40,8 +40,9 @@ public class UserApi {
     @PostMapping(consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     User createUser(@RequestBody final User user) {
-        logger.info("Create user: {}", user);
-        return userService.createUser(user);
+        User createdUser = userService.createUser(user);
+        logger.info("Create user: {}", createdUser);
+        return createdUser;
     }
 
 }

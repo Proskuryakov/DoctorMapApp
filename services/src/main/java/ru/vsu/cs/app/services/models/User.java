@@ -1,19 +1,23 @@
 package ru.vsu.cs.app.services.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import ru.vsu.cs.app.commons.models.UserRole;
 
 @NoArgsConstructor
-@Getter
 @Setter
+@Getter
+@ToString
 @JsonDeserialize
 public class User {
 
     private Long id;
     private String email;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String password;
     private String fio;
     private UserRole role;

@@ -9,7 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import ru.vsu.cs.app.db.models.UserModel;
+import ru.vsu.cs.app.db.models.ResponseUserModel;
 import ru.vsu.cs.app.db.repositories.UserRepository;
 
 import javax.servlet.FilterChain;
@@ -46,17 +46,20 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
             throw new ServletException("Unexpected authorization class");
         }
 
-        UserModel userModel = userRepository.findByEmail(((UserDetails) object).getUsername());
+        ResponseUserModel responseUserModel = userRepository.getResponseUserModel(((UserDetails) object).getUsername());
 
         SecurityContextHolder.getContext()
                 .setAuthentication(new UsernamePasswordAuthenticationToken(
-                                userModel,
+                                responseUserModel,
                                 null,
-                                Set.of(new SimpleGrantedAuthority("ROLE_" + userModel.getUserRole().getName()))
+                                Set.of(new SimpleGrantedAuthority("ROLE_" + responseUserModel.getRole().name()))
                         )
                 );
 
-        OBJECT_MAPPER.writeValue(response.getWriter(), userModel);
+        response.setCharacterEncoding("UTF-8");
+
+        OBJECT_MAPPER.writeValue(response.getWriter(), responseUserModel);
+        logger.info("Authentication successfully. {}", responseUserModel);
     }
 
 }
