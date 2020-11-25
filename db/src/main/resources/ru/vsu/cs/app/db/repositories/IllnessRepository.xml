@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.vsu.cs.app.db.repositories.IllnessRepository">
+
+    <select id="create"
+            parameterType="ru.vsu.cs.app.db.models.IllnessModel"
+            resultType="ru.vsu.cs.app.db.models.IllnessModel"
+    >
+        insert into illness (name, color)
+        values (#{name}, #{color})
+        returning id, name, color;
+    </select>
+
+    <select id="findById" parameterType="long" resultType="ru.vsu.cs.app.db.models.IllnessModel">
+        select id, name, color
+        from illness
+        where id = #{id};
+    </select>
+
+    <delete id="delete" parameterType="long">
+        delete
+        from illness
+        where id = #{id};
+    </delete>
+
+
+    <update id="update" parameterType="ru.vsu.cs.app.db.models.IllnessModel">
+
+        update illness
+        set name  = #{name},
+            color = #{color}
+        where id = #{id};
+    </update>
+
+    <select id="getAll" resultType="ru.vsu.cs.app.db.models.IllnessModel">
+        select * from illness
+    </select>
+
+</mapper>
