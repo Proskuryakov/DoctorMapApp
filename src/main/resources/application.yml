@@ -11,8 +11,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/doctor_map_app
     username: doctor
     password: doctor
-  jpa:
-    show-sql: true
-    database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
-    hibernate.ddl-auto: none
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true

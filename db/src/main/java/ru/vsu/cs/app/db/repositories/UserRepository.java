@@ -1,12 +1,20 @@
 package ru.vsu.cs.app.db.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Param;
+import ru.vsu.cs.app.db.models.ResponseUserModel;
 import ru.vsu.cs.app.db.models.UserModel;
+import org.apache.ibatis.annotations.Mapper;
 
-@Repository
-public interface UserRepository extends JpaRepository<UserModel, Long> {
+import java.util.Optional;
 
-    UserModel findByEmail(String email);
+@Mapper
+public interface UserRepository {
 
+    UserModel getUserModel(@Param("email") String email);
+
+    ResponseUserModel getResponseUserModel(@Param("email") String email);
+
+    ResponseUserModel createUser(UserModel userModel);
+
+    Optional<ResponseUserModel> findById(@Param("id")Long id);
 }
