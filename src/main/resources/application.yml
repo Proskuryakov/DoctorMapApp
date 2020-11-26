@@ -14,3 +14,7 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+nominatim:
+  url:
+    search: https://nominatim.openstreetmap.org/search/
+    start-param: ?format=geojson&limit=1

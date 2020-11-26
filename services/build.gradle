@@ -6,6 +6,7 @@ ext {
 dependencies {
     implementation(project(':db'))
     implementation(project(':security'))
+    implementation(project(':geocoding'))
 
     implementation "com.fasterxml.jackson.core:jackson-databind:2.11.1"
     implementation 'org.springframework.security:spring-security-core:5.4.1'
