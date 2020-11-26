@@ -26,3 +26,11 @@ databaseChangeLog:
         - sqlFile:
             path: DOCTOR-MAP-APP-1-20201125-1615.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: DDOCTOR-MAP-APP-1-20201125-1945
+      author: egor_proskuryakov
+      comment: Add illness table
+      changes:
+        - sqlFile:
+            path: DOCTOR-MAP-APP-1-20201125-1945.sql
+            relativeToChangelogFile: true
