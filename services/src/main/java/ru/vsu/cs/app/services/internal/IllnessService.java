@@ -16,4 +16,6 @@ public interface IllnessService {
 
     List<Illness> getAll();
 
+    List<Illness> getAll(Long sickId);
+
 }

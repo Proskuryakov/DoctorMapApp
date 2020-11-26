@@ -68,4 +68,9 @@ public class IllnessServiceImpl implements IllnessService {
     public List<Illness> getAll() {
         return illnessMapper.fromModel(illnessRepository.getAll());
     }
+
+    @Override
+    public List<Illness> getAll(Long sickId) {
+        return illnessMapper.fromModel(illnessRepository.getAllBySickId(sickId));
+    }
 }

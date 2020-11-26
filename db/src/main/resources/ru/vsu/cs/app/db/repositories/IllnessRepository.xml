@@ -35,7 +35,15 @@
     </update>
 
     <select id="getAll" resultType="ru.vsu.cs.app.db.models.IllnessModel">
-        select * from illness
+        select *
+        from illness
+    </select>
+
+    <select id="getAllBySickId" resultType="ru.vsu.cs.app.db.models.IllnessModel">
+        select id, name, color
+        from illness
+                 join illness_sick i on illness.id = i.illness_id
+        where i.sick_id = #{sickId}
     </select>
 
 </mapper>

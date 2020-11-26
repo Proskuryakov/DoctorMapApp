@@ -20,4 +20,5 @@ public interface IllnessRepository {
 
     List<IllnessModel> getAll();
 
+    List<IllnessModel> getAllBySickId(@Param("sickId") Long sickId);
 }
