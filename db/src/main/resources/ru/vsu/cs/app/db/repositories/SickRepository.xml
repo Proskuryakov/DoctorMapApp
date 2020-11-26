@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.vsu.cs.app.db.repositories.SickRepository">
+
+    <select id="create"
+            parameterType="ru.vsu.cs.app.db.models.SickModel"
+            resultType="ru.vsu.cs.app.db.models.SickModel"
+    >
+        insert into sick (address_id, surname, name_patronymic)
+        values (#{addressId}, #{surname}, #{namePatronymic})
+        returning id, address_id, surname, name_patronymic;
+    </select>
+
+    <insert id="addIllnessDependence">
+        insert into illness_sick values
+        <foreach collection="illnessIdList" item="illnessId" separator=",">
+            (#{sickId}, #{illnessId})
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="ru.vsu.cs.app.db.models.SickModel">
+        update sick
+        set address_id      = #{addressId},
+            surname         = #{surname},
+            name_patronymic = #{namePatronymic}
+        where id = #{id};
+    </update>
+
+    <delete id="delete" parameterType="long">
+        delete
+        from sick
+        where id = #{id};
+    </delete>
+
+    <select id="getById" parameterType="long" resultType="ru.vsu.cs.app.db.models.SickWithAddressModel">
+        select *
+        from sick s
+                 join geoAddress a on a.id = s.address_id
+        where s.id = #{id};
+    </select>
+
+    <select id="getAllByParameters" resultType="ru.vsu.cs.app.db.models.SickWithAddressModel">
+        select s.id, s.address_id, s.surname, s.name_patronymic, a.region, a.city, a.street, a.house, a.lat, a.lon
+        from sick s
+        join geoAddress a on a.id = s.address_id
+        <if test="illnessIdList != null">
+            <foreach collection="illnessIdList" index="i">
+                join illness_sick i#{i} on s.id = i#{i}.sick_id
+            </foreach>
+        </if>
+        <where>
+            <if test="sickModel != null">
+                surname = #{surname},
+                name_patronymic = #{namePatronymic}
+            </if>
+            <if test="addressModel != null">
+                <if test="region != null">
+                    region = #{region}
+                </if>
+                <if test="city != null">
+                    city = #{city}
+                </if>
+                <if test="street != null">
+                    street = #{street}
+                </if>
+                <if test="house != null">
+                    house = #{house}
+                </if>
+            </if>
+            <if test="illnessIdList != null">
+                <foreach collection="illnessIdList" item="illnessId" separator=" and " index="i">
+                    i#{i}.illness_id = #{illnessId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+</mapper>

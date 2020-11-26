@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.vsu.cs.app.db.repositories.AddressRepository">
+
+    <select id="create"
+            parameterType="ru.vsu.cs.app.db.models.AddressModel"
+            resultType="ru.vsu.cs.app.db.models.AddressModel"
+    >
+        insert into geoAddress (region, city, street, house, lat, lon)
+        values (#{region}, #{city}, #{street}, #{house}, #{lat}, #{lon})
+        returning id, region, city, street, house, lat, lon;
+    </select>
+
+    <delete id="delete" parameterType="long">
+        delete
+        from geoAddress
+        where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="ru.vsu.cs.app.db.models.AddressModel">
+        update geoAddress
+        set region = #{region},
+            city   = #{city},
+            street = #{street},
+            house  = #{house},
+            lat    = #{lat},
+            lon    = #{lon}
+        where id = #{id}
+    </update>
+
+    <select id="findByAddress"
+            parameterType="ru.vsu.cs.app.db.models.AddressModel"
+            resultType="ru.vsu.cs.app.db.models.AddressModel">
+        select *
+        from geoAddress
+        <where>
+            <if test="region != null">
+                region = #{region}
+            </if>
+            <if test="region != null">
+                and city = #{city}
+            </if>
+            <if test="region != null">
+                and street = #{street}
+            </if>
+            <if test="region != null">
+                and house = #{house}
+            </if>
+            <if test="lat != null">
+                and lat = #{lat}
+            </if>
+            <if test="lon != null">
+                and lon = #{lon}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="findById" parameterType="long" resultType="ru.vsu.cs.app.db.models.AddressModel"
+    >
+        select *
+        from geoAddress
+        where id = #{id}
+    </select>
+
+</mapper>
