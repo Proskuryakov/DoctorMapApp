@@ -1,4 +1,4 @@
-create table geoAddress
+create table geoaddress
 (
     id     serial primary key not null,
     region varchar(100)       not null,
@@ -30,7 +30,7 @@ create table illness_sick
 
     constraint illness_sick_sick_sick_id
         foreign key (sick_id)
-            references sick (id),
+            references sick (id) on delete cascade,
 
     constraint illness_sick_illness_illness_id
         foreign key (illness_id)

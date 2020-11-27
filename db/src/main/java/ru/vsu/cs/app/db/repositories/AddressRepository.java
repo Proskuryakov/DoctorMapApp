@@ -15,4 +15,6 @@ public interface AddressRepository {
     AddressModel findByAddress(AddressModel addressModel);
 
     AddressModel findById(Long id);
+
+    Long getSickCount(Long addressId);
 }

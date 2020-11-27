@@ -8,7 +8,7 @@
             parameterType="ru.vsu.cs.app.db.models.AddressModel"
             resultType="ru.vsu.cs.app.db.models.AddressModel"
     >
-        insert into geoAddress (region, city, street, house, lat, lon)
+        insert into geoaddress (region, city, street, house, lat, lon)
         values (#{region}, #{city}, #{street}, #{house}, #{lat}, #{lon})
         returning id, region, city, street, house, lat, lon;
     </select>
@@ -20,7 +20,7 @@
     </delete>
 
     <update id="update" parameterType="ru.vsu.cs.app.db.models.AddressModel">
-        update geoAddress
+        update geoaddress
         set region = #{region},
             city   = #{city},
             street = #{street},
@@ -34,25 +34,19 @@
             parameterType="ru.vsu.cs.app.db.models.AddressModel"
             resultType="ru.vsu.cs.app.db.models.AddressModel">
         select *
-        from geoAddress
+        from geoaddress
         <where>
             <if test="region != null">
                 region = #{region}
             </if>
-            <if test="region != null">
+            <if test="city != null">
                 and city = #{city}
             </if>
-            <if test="region != null">
+            <if test="street != null">
                 and street = #{street}
             </if>
-            <if test="region != null">
+            <if test="house != null">
                 and house = #{house}
-            </if>
-            <if test="lat != null">
-                and lat = #{lat}
-            </if>
-            <if test="lon != null">
-                and lon = #{lon}
             </if>
         </where>
 
@@ -61,8 +55,15 @@
     <select id="findById" parameterType="long" resultType="ru.vsu.cs.app.db.models.AddressModel"
     >
         select *
-        from geoAddress
+        from geoaddress
         where id = #{id}
+    </select>
+
+    <select id="getSickCount" parameterType="long" resultType="long">
+        select count(*)
+        from geoaddress
+                 join sick s on geoaddress.id = s.address_id
+        where s.address_id = #{addressId}
     </select>
 
 </mapper>
