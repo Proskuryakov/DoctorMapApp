@@ -6,6 +6,7 @@ import ru.vsu.cs.app.services.models.Illness;
 import ru.vsu.cs.app.services.models.Sick;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SickService {
 
@@ -17,16 +18,5 @@ public interface SickService {
 
     Sick get(Long id);
 
-    List<Sick> getAll();
-
-    List<Sick> getAllByFullName(FullName fullName);
-
-    List<Sick> getAllByAddress(Address address);
-
-    List<Sick> getAllByIllness(List<Illness> illnesses);
-
-    List<Sick> getAll(Sick sick, List<Illness> illnesses);
-
-    List<Sick> getAll(Sick sick);
-
+    List<Sick> getByParameters(Map<String, String> parameters);
 }

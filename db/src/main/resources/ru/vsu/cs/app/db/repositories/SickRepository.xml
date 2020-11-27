@@ -34,7 +34,7 @@
         where id = #{id};
     </delete>
 
-    <select id="getById" parameterType="long" resultType="ru.vsu.cs.app.db.models.SickWithAddressModel">
+    <select id="findById" parameterType="long" resultType="ru.vsu.cs.app.db.models.SickWithAddressModel">
         select *
         from sick s
                  join geoAddress a on a.id = s.address_id
@@ -42,39 +42,47 @@
     </select>
 
     <select id="getAllByParameters" resultType="ru.vsu.cs.app.db.models.SickWithAddressModel">
-        select s.id, s.address_id, s.surname, s.name_patronymic, a.region, a.city, a.street, a.house, a.lat, a.lon
-        from sick s
-        join geoAddress a on a.id = s.address_id
-        <if test="illnessIdList != null">
-            <foreach collection="illnessIdList" index="i">
-                join illness_sick i#{i} on s.id = i#{i}.sick_id
-            </foreach>
-        </if>
-        <where>
-            <if test="sickModel != null">
-                surname = #{surname},
-                name_patronymic = #{namePatronymic}
-            </if>
-            <if test="addressModel != null">
-                <if test="region != null">
-                    region = #{region}
-                </if>
-                <if test="city != null">
-                    city = #{city}
-                </if>
-                <if test="street != null">
-                    street = #{street}
-                </if>
-                <if test="house != null">
-                    house = #{house}
-                </if>
-            </if>
+        <trim suffixOverrides="AND">
+            select s.id, s.address_id, s.surname, s.name_patronymic, a.region, a.city, a.street, a.house, a.lat, a.lon
+            from sick s
+            join geoAddress a on a.id = s.address_id
             <if test="illnessIdList != null">
-                <foreach collection="illnessIdList" item="illnessId" separator=" and " index="i">
-                    i#{i}.illness_id = #{illnessId}
+                <foreach collection="illnessIdList" item="illnessId">
+                    join illness_sick i${illnessId} on s.id = i${illnessId}.sick_id
                 </foreach>
             </if>
-        </where>
+            <where>
+                <if test="sickModel != null">
+                    <if test="sickModel.surname != null">
+                        surname = #{sickModel.surname} and
+                    </if>
+                    <if test="sickModel.namePatronymic != null">
+                        <bind name="namePattern" value="'%' + sickModel.namePatronymic + '%'"/>
+                        name_patronymic like #{namePattern} and
+                    </if>
+                </if>
+                <if test="addressModel != null">
+                    <if test="addressModel.region != null">
+                        <bind name="regionPattern" value="'%' + addressModel.region + '%'"/>
+                        region like #{regionPattern} and
+                    </if>
+                    <if test="addressModel.city != null">
+                        city = #{addressModel.city} and
+                    </if>
+                    <if test="addressModel.street != null">
+                        street = #{addressModel.street} and
+                    </if>
+                    <if test="addressModel.house != null">
+                        house = #{addressModel.house} and
+                    </if>
+                </if>
+                <if test="illnessIdList != null">
+                    <foreach collection="illnessIdList" item="illnessId" separator=" and ">
+                        i${illnessId}.illness_id = #{illnessId}
+                    </foreach>
+                </if>
+            </where>
+        </trim>
     </select>
 
 </mapper>

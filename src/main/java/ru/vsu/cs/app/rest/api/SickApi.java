@@ -9,6 +9,9 @@ import ru.vsu.cs.app.services.internal.SickService;
 import ru.vsu.cs.app.services.models.Illness;
 import ru.vsu.cs.app.services.models.Sick;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping(
         value = "/sick",
@@ -36,6 +39,11 @@ public class SickApi {
 
         logger.info("Return {}", sick);
         return sick;
+    }
+
+    @GetMapping
+    List<Sick> getByParameters(@RequestParam Map<String, String> parameters){
+        return sickService.getByParameters(parameters);
     }
 
     @PostMapping(consumes = "application/json")

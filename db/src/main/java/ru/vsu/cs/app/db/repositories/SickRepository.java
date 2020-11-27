@@ -23,25 +23,8 @@ public interface SickRepository {
     SickWithAddressModel findById(Long id);
 
     List<SickWithAddressModel> getAllByParameters(
-            SickModel sickModel,
-            AddressModel addressModel,
-            List<Long> illnessIdList
+            @Param("sickModel") SickModel sickModel,
+            @Param("addressModel") AddressModel addressModel,
+            @Param("illnessIdList") List<Long> illnessIdList
     );
-
-    default List<SickWithAddressModel> getAllByFIO(SickModel sickModel) {
-        return getAllByParameters(sickModel, null, null);
-    }
-
-    default List<SickWithAddressModel> getAllByAddress(AddressModel addressModel) {
-        return getAllByParameters(null, addressModel, null);
-    }
-
-    default List<SickWithAddressModel> getAllByIllness(List<Long> illnessIdList) {
-        return getAllByParameters(null, null, illnessIdList);
-    }
-
-    default List<SickWithAddressModel> getAll() {
-        return getAllByParameters(null, null, null);
-    }
-
 }
