@@ -42,17 +42,47 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public boolean delete(Long id) {
-        return false;
+    public boolean delete(Long addressId) {
+        AddressModel addressModel = addressRepository.findById(addressId);
+
+        if (addressModel == null) return false;
+
+        addressRepository.delete(addressId);
+        return true;
     }
 
     @Override
-    public void update(Address address) {
+    public Address update(Address address) {
 
+        Long count = getSickCount(address.getId());
+
+        if (count > 1) {
+            return create(address);
+        }
+
+        var createdAddress = addressRepository.findByAddress(addressMapper.toModel(address));
+
+        if (createdAddress != null) {
+            return addressMapper.fromModel(createdAddress);
+        }
+
+        Coordinates coordinates = geocodingService.encode(addressMapper.toGeoModel(address));
+        AddressModel addressModel = addressMapper.toModel(address, coordinates);
+        addressRepository.update(addressModel);
+        address.setLat(coordinates.getLat());
+        address.setLon(coordinates.getLon());
+
+        return address;
     }
 
     @Override
     public Address get(Long id) {
-        return null;
+        AddressModel addressModel = addressRepository.findById(id);
+        return addressMapper.fromModel(addressModel);
+    }
+
+    @Override
+    public Long getSickCount(Long addressId) {
+        return addressRepository.getSickCount(addressId);
     }
 }

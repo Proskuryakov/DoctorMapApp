@@ -8,8 +8,10 @@ public interface AddressService {
 
     boolean delete(Long id);
 
-    void update(Address address);
+    Address update(Address address);
 
     Address get(Long id);
+
+    Long getSickCount(Long addressId);
 
 }

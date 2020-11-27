@@ -51,29 +51,54 @@ public class SickServiceImpl implements SickService {
         var sickModel = sickMapper.toModel(sick, address.getId());
         sickModel = sickRepository.create(sickModel);
 
-        var illnessesList = sick.getIllnesses().stream().map(Illness::getId).collect(Collectors.toList());
-
-        sickRepository.addIllnessDependence(sickModel.getId(), illnessesList);
+        if (sick.getIllnesses() != null) {
+            List<Long> illnessesList = sick.getIllnesses().stream().map(Illness::getId).collect(Collectors.toList());
+            sickRepository.addIllnessDependence(sickModel.getId(), illnessesList);
+        }
 
         return sickMapper.fromModel(sickModel, address, sick.getIllnesses());
     }
 
     @Override
     public Sick update(Sick sick) {
-        return null;
+        Address updateAddress = addressService.update(sick.getAddress());
+
+        SickModel sickModel = sickMapper.toModel(sick, updateAddress.getId());
+        sickRepository.update(sickModel);
+
+        Long count = addressService.getSickCount(sick.getAddress().getId());
+        if (count == null || count == 0) {
+            addressService.delete(sick.getAddress().getId());
+        }
+
+        return sickMapper.fromModel(sickModel, updateAddress);
     }
 
     @Override
     public boolean delete(Long id) {
-        return false;
+        SickWithAddressModel sickModel = sickRepository.findById(id);
+
+        if (sickModel == null) return false;
+
+        Long addressId = sickModel.getAddressId();
+        sickRepository.delete(id);
+
+        Long count = addressService.getSickCount(addressId);
+        if (count == null || count == 0) {
+            addressService.delete(addressId);
+        }
+
+        return true;
     }
 
     @Override
     public Sick get(Long id) {
+        SickWithAddressModel sickModel = sickRepository.findById(id);
+        if (sickModel == null) return null;
+
         List<Illness> illnesses = illnessService.getAll(id);
 
-        Sick sick = sickMapper.fromModel(sickRepository.findById(id));
-
+        Sick sick = sickMapper.fromModel(sickModel);
         sick.setIllnesses(illnesses);
 
         return sick;
@@ -83,7 +108,7 @@ public class SickServiceImpl implements SickService {
     public List<Sick> getByParameters(Map<String, String> parameters) {
         Address address = fillAddress(parameters);
         FullName fullName = fillFullName(parameters);
-        List<Long> illnessIdList = fillIllnessIdList(parameters);
+        List<Long> illnessIdList = fillIllnessIdList(parameters, "illness");
 
         AddressModel addressModel = address != null ? addressMapper.toModel(address) : null;
         SickModel sickModel = fullName != null ? sickMapper.toModel(fullName) : null;
@@ -95,6 +120,43 @@ public class SickServiceImpl implements SickService {
         concatIllness(parameters, sicks);
 
         return sicks;
+    }
+
+    @Override
+    public boolean changeIllness(Long id, Map<String, String> parameters) {
+        SickWithAddressModel sickModel = sickRepository.findById(id);
+        if (sickModel == null) return false;
+
+        boolean res = false;
+
+        List<Long> addIllness = getCheckIllness(id, parameters, "add-illness");
+        if (addIllness != null) {
+            sickRepository.addIllnessDependence(sickModel.getId(), addIllness);
+            res = true;
+        }
+
+        List<Long> deleteIllness = getCheckIllness(id, parameters, "delete-illness");
+        if (deleteIllness != null) {
+            sickRepository.deleteIllnessDependence(sickModel.getId(), deleteIllness);
+            res = true;
+        }
+
+        return res;
+    }
+
+    private List<Long> getCheckIllness(Long sickId, Map<String, String> parameters, String key) {
+        List<Long> inputIllnessId = fillIllnessIdList(parameters, key);
+        if (inputIllnessId == null) return null;
+
+        List<Illness> allIllness = illnessService.getAll();
+        if (allIllness.isEmpty()) return null;
+
+        List<Long> allIllnessId = allIllness.stream().map(Illness::getId).distinct().collect(Collectors.toList());
+        List<Long> newIllnessList = inputIllnessId.stream().filter(allIllnessId::contains).collect(Collectors.toList());
+
+        if (newIllnessList.isEmpty()) return null;
+
+        return newIllnessList;
     }
 
     private String getDecode(Map<String, String> parameters, String key) {
@@ -141,8 +203,8 @@ public class SickServiceImpl implements SickService {
         return fullName;
     }
 
-    private List<Long> fillIllnessIdList(Map<String, String> parameters) {
-        String illnessStr = getDecode(parameters, "illness");
+    private List<Long> fillIllnessIdList(Map<String, String> parameters, String key) {
+        String illnessStr = getDecode(parameters, key);
 
         if (illnessStr == null) {
             return null;

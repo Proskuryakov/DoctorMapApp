@@ -20,6 +20,8 @@ public interface SickRepository {
 
     void delete(Long id);
 
+    void deleteIllnessDependence(@Param("sickId") Long sickId, @Param("illnessIdList") List<Long> illnessIdList);
+
     SickWithAddressModel findById(Long id);
 
     List<SickWithAddressModel> getAllByParameters(

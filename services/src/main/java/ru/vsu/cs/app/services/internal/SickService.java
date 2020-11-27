@@ -19,4 +19,6 @@ public interface SickService {
     Sick get(Long id);
 
     List<Sick> getByParameters(Map<String, String> parameters);
+
+    boolean changeIllness(Long id, Map<String, String> parameters);
 }

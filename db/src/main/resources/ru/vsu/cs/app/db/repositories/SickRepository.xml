@@ -34,6 +34,12 @@
         where id = #{id};
     </delete>
 
+    <delete id="deleteIllnessDependence">
+        <foreach collection="illnessIdList" item="illnessId">
+            delete from illness_sick where sick_id = #{sickId} and illness_id = #{illnessId};
+        </foreach>
+    </delete>
+
     <select id="findById" parameterType="long" resultType="ru.vsu.cs.app.db.models.SickWithAddressModel">
         select *
         from sick s
