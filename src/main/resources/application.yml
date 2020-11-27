@@ -18,3 +18,15 @@ nominatim:
   url:
     search: https://nominatim.openstreetmap.org/search/
     start-param: ?format=geojson&limit=1
+
+#logging:
+#  level:
+#    org:
+#      springframework: WARN
+#    ru:
+#      vsu:
+#        cs:
+#          app:
+#            db:
+#              repositories:
+#                SickRepository: DEBUG
