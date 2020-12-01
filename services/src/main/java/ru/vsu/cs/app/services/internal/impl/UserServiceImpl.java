@@ -1,6 +1,7 @@
 package ru.vsu.cs.app.services.internal.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.vsu.cs.app.db.models.ResponseUserModel;
@@ -52,5 +53,16 @@ public class UserServiceImpl implements UserService {
     public boolean deleteById(Long id) {
         return false;
     }
+
+    @Override
+    public User getCurrentUser(Object object) {
+
+        if (!(object instanceof ResponseUserModel)) {
+            return null;
+        }
+
+        return userMapper.fromModel((ResponseUserModel) object);
+    }
+
 
 }

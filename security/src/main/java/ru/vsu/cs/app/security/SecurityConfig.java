@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -29,6 +30,7 @@ import ru.vsu.cs.app.db.repositories.UserRepository;
 import ru.vsu.cs.app.security.converter.AuthenticationConverterImpl;
 import ru.vsu.cs.app.security.handler.AuthenticationSuccessHandlerImpl;
 import ru.vsu.cs.app.commons.models.UserRole;
+import ru.vsu.cs.app.security.handler.LogoutSuccessHandlerImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -89,14 +91,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 
 
         http
-                .csrf()/*.csrfTokenRepository(csrfTokenRepository()).and()*/.disable()
+                .csrf()./*csrfTokenRepository(csrfTokenRepository()).and()*/disable()
                 .authorizeRequests()
-                .antMatchers("/auth/**").not().authenticated()
-                .antMatchers("/admin/**").hasAuthority("ROLE_" + UserRole.ADMIN.name())
+                .antMatchers("/auth/profile", "/public/**").permitAll()
+                .antMatchers("/auth/login").not().authenticated()
+                .antMatchers("/users/**").hasAuthority("ROLE_" + UserRole.ADMIN.name())
                 .anyRequest().authenticated()
                 .and()
                 .logout()
-                .logoutUrl("/logout")
+                .logoutSuccessHandler(new LogoutSuccessHandlerImpl())
+                .logoutUrl("/auth/logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .and()

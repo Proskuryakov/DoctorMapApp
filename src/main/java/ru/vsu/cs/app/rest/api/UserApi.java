@@ -4,13 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import ru.vsu.cs.app.rest.exception.ObjectNotExistsException;
 import ru.vsu.cs.app.services.internal.UserService;
 import ru.vsu.cs.app.services.models.User;
 
 @RestController
 @RequestMapping(
-        value = "/users",
         produces = "application/json"
 )
 public class UserApi {
@@ -24,25 +25,40 @@ public class UserApi {
     }
 
 
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/users/{id}")
     User getById(@PathVariable("id") Long id) {
         final var user = userService.getById(id);
         if (user == null) {
             logger.error("Get Error. Object with such id does not exist");
-            //throw new ObjectNotExistsException();
-            // todo Сделать ловлю ошибок и отправка сообщения об ошибке в ответ на запрос
+            throw new ObjectNotExistsException();
         }
 
         logger.info("Return {} by id = {}", user, id);
         return user;
     }
 
-    @PostMapping(consumes = "application/json")
+    @PostMapping(path = "/users", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     User createUser(@RequestBody final User user) {
         User createdUser = userService.createUser(user);
         logger.info("Create user: {}", createdUser);
         return createdUser;
+    }
+
+    @GetMapping(path = "auth/profile")
+    public User getCurrentUser(Authentication authentication) {
+        if (authentication == null) return null;
+
+        User currentUser = userService.getCurrentUser(authentication.getPrincipal());
+
+        if (currentUser == null) {
+            logger.info("Error");
+            return null;
+//            throw new ObjectNotExistsException();
+        }
+
+        logger.info("Return current {}", currentUser);
+        return currentUser;
     }
 
 }
