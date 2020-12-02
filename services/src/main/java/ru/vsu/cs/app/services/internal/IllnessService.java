@@ -3,6 +3,7 @@ package ru.vsu.cs.app.services.internal;
 import ru.vsu.cs.app.services.models.Illness;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IllnessService {
 
@@ -17,5 +18,7 @@ public interface IllnessService {
     List<Illness> getAll();
 
     List<Illness> getAll(Long sickId);
+
+    List<Illness> getAll(Map<String, String> parameters);
 
 }

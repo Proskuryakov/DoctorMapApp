@@ -46,4 +46,9 @@
         where i.sick_id = #{sickId}
     </select>
 
+    <select id="getAllLikeName" resultType="ru.vsu.cs.app.db.models.IllnessModel">
+        <bind name="namePattern" value="'%' + name + '%'"/>
+        select id, name, color from illness where lower(name) like lower(#{namePattern})
+    </select>
+
 </mapper>

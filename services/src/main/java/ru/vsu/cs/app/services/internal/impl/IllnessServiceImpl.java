@@ -7,7 +7,11 @@ import ru.vsu.cs.app.services.internal.IllnessService;
 import ru.vsu.cs.app.services.mappers.IllnessMapper;
 import ru.vsu.cs.app.services.models.Illness;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class IllnessServiceImpl implements IllnessService {
@@ -72,5 +76,16 @@ public class IllnessServiceImpl implements IllnessService {
     @Override
     public List<Illness> getAll(Long sickId) {
         return illnessMapper.fromModel(illnessRepository.getAllBySickId(sickId));
+    }
+
+    @Override
+    public List<Illness> getAll(Map<String, String> parameters) {
+        if (parameters.isEmpty()) return getAll();
+        try {
+            String name = URLDecoder.decode(parameters.get("name"), StandardCharsets.UTF_8.name());
+            return illnessMapper.fromModel(illnessRepository.getAllLikeName(name));
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

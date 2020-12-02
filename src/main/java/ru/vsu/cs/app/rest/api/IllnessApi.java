@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.vsu.cs.app.rest.exception.ObjectNotExistsException;
 import ru.vsu.cs.app.services.internal.IllnessService;
 import ru.vsu.cs.app.services.models.Illness;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(
@@ -72,12 +74,12 @@ public class IllnessApi {
     }
 
     @GetMapping
-    List<Illness> getAll(){
-        final var illnessList = illnessService.getAll();
+    List<Illness> getAll(@RequestParam Map<String, String> parameters){
+        final var illnessList = illnessService.getAll(parameters);
 
-        if(illnessList == null || illnessList.isEmpty()){
+        if(illnessList == null){
             logger.error("GET request error. Illness do not exist");
-            //throw new ObjectNotExistsException();
+            throw new ObjectNotExistsException();
         }
         logger.info("Return all illness");
         return illnessList;
