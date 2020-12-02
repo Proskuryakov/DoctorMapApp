@@ -27,6 +27,6 @@ public interface SickRepository {
     List<SickWithAddressModel> getAllByParameters(
             @Param("sickModel") SickModel sickModel,
             @Param("addressModel") AddressModel addressModel,
-            @Param("illnessIdList") List<Long> illnessIdList
-    );
+            @Param("illnessIdList") List<Long> illnessIdList,
+            @Param("isIllnessTogether") boolean isIllnessTogether);
 }

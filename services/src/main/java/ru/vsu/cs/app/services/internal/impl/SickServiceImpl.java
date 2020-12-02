@@ -109,12 +109,13 @@ public class SickServiceImpl implements SickService {
         Address address = fillAddress(parameters);
         FullName fullName = fillFullName(parameters);
         List<Long> illnessIdList = fillIllnessIdList(parameters, "illness");
+        boolean isIllnessTogether = parameters.containsKey("illness-together");
 
         AddressModel addressModel = address != null ? addressMapper.toModel(address) : null;
         SickModel sickModel = fullName != null ? sickMapper.toModel(fullName) : null;
 
         List<SickWithAddressModel> sickModelList =
-                sickRepository.getAllByParameters(sickModel, addressModel, illnessIdList);
+                sickRepository.getAllByParameters(sickModel, addressModel, illnessIdList, isIllnessTogether);
 
         List<Sick> sicks = sickMapper.fromModelList(sickModelList);
         concatIllness(parameters, sicks);
