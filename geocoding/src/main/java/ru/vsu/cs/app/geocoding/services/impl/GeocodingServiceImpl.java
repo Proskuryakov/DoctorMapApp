@@ -41,7 +41,7 @@ public class GeocodingServiceImpl implements GeocodingService {
 
         var response = objectMapper.readValue(url, Response.class);
 
-        if (response != null) {
+        if (response != null && response.getFeatures() != null && response.getFeatures().length != 0) {
             Geometry g = response.getFeatures()[0].getGeometry();
             return new Coordinates(g.getLat(), g.getLon());
         }
