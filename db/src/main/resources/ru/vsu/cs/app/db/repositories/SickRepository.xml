@@ -103,7 +103,10 @@
 
                 </if>
             </where>
-            group by s.id, s.address_id, s.surname, s.name_patronymic, a.region, a.city, a.street, a.house, a.lat, a.lon;
+            <if test="illnessIdList != null">
+                group by s.id, s.address_id, s.surname, s.name_patronymic, a.region, a.city, a.street, a.house, a.lat,
+                a.lon;
+            </if>
         </trim>
     </select>
 
