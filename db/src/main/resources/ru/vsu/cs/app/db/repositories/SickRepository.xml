@@ -53,12 +53,12 @@
             from sick s
             join geoAddress a on a.id = s.address_id
             <if test="illnessIdList != null">
-                <if test="!isIllnessTogether">
+                <if test="isIllnessTogether">
                     <foreach collection="illnessIdList" item="illnessId">
                         join illness_sick i${illnessId} on s.id = i${illnessId}.sick_id
                     </foreach>
                 </if>
-                <if test="isIllnessTogether">
+                <if test="!isIllnessTogether">
                     join illness_sick i on s.id = i.sick_id
                 </if>
             </if>
@@ -89,13 +89,13 @@
                 </if>
                 <if test="illnessIdList != null">
 
-                    <if test="!isIllnessTogether">
+                    <if test="isIllnessTogether">
                         <foreach collection="illnessIdList" item="illnessId" separator=" and ">
                             i${illnessId}.illness_id = #{illnessId}
                         </foreach>
                     </if>
 
-                    <if test="isIllnessTogether">
+                    <if test="!isIllnessTogether">
                         <foreach collection="illnessIdList" item="illnessId" separator=" or ">
                             i.illness_id = #{illnessId}
                         </foreach>
