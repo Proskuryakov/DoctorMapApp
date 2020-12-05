@@ -63,6 +63,8 @@ public class SickServiceImpl implements SickService {
     public Sick update(Sick sick) {
         Address updateAddress = addressService.update(sick.getAddress());
 
+        if(updateAddress == null) return null;
+
         SickModel sickModel = sickMapper.toModel(sick, updateAddress.getId());
         sickRepository.update(sickModel);
 

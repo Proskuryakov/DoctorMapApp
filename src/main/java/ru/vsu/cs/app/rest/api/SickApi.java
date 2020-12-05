@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.vsu.cs.app.rest.exception.ObjectNotExistsException;
 import ru.vsu.cs.app.services.internal.SickService;
 import ru.vsu.cs.app.services.models.Sick;
 
@@ -60,7 +61,7 @@ public class SickApi {
             return;
         }
         logger.error("Delete Error. Object with such id does not exist");
-        //throw new ObjectNotExistsException();
+        throw new ObjectNotExistsException();
     }
 
     @PutMapping(consumes = "application/json")
@@ -69,7 +70,7 @@ public class SickApi {
 
         if (updateSick == null) {
             logger.error("Update Error. Object with such id does not exist");
-            //throw new ObjectNotExistsException();
+            throw new ObjectNotExistsException();
         }
 
         logger.info("Update: {}", updateSick);
@@ -83,7 +84,7 @@ public class SickApi {
             return;
         }
         logger.error("Error");
-        //throw new ObjectNotExistsException();
+        throw new ObjectNotExistsException();
     }
 
 }

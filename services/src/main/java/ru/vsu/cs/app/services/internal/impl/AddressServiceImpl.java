@@ -67,6 +67,9 @@ public class AddressServiceImpl implements AddressService {
         }
 
         Coordinates coordinates = geocodingService.encode(addressMapper.toGeoModel(address));
+
+        if(coordinates == null) return null;
+
         AddressModel addressModel = addressMapper.toModel(address, coordinates);
         addressRepository.update(addressModel);
         address.setLat(coordinates.getLat());
