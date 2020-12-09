@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.vsu.cs.app.db.repositories.StatisticsRepository">
+
+    <select id="getCityIllnessCount" resultType="ru.vsu.cs.app.db.models.CitySickCountModel">
+
+        select g.city, count(*) as count
+        from sick
+        join geoaddress g on g.id = sick.address_id
+        join illness_sick i on sick.id = i.sick_id
+        <if test="illnessId != null">
+            where i.illness_id = #{illnessId}
+        </if>
+        group by g.city
+        order by count
+        <if test="isDescendingSort">
+            desc
+        </if>
+        <if test="!isDescendingSort">
+            asc
+        </if>
+        ;
+
+    </select>
+
+</mapper>

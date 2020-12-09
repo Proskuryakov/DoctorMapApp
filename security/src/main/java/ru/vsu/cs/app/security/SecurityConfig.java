@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -93,7 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         http
                 .csrf()./*csrfTokenRepository(csrfTokenRepository()).and()*/disable()
                 .authorizeRequests()
-                .antMatchers("/auth/profile", "/public/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/auth/profile", "/statistics/**", "/illness/**").permitAll()
                 .antMatchers("/auth/login").not().authenticated()
                 .antMatchers("/users/**").hasAuthority("ROLE_" + UserRole.ADMIN.name())
                 .anyRequest().authenticated()
